@@ -1,0 +1,90 @@
+/* fontes baixadas na pasta public/fonts pra funcionar mesmo sem internet */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/plus-jakarta-sans.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/fraunces.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/fraunces-italic.woff2') format('woff2');
+}
+
+:root {
+  --bg: #eef6fd;
+  --surface: #ffffff;
+  --surface-soft: #f5faff;
+  --sky-50: #e8f3fd;
+  --sky-100: #d4e9fb;
+  --sky-200: #b6daf7;
+  --sky-300: #8ec6f2;
+  --accent: #3b97e3;
+  --accent-dark: #1d6fb5;
+  --ink: #16324f;
+  --muted: #62788f;
+  --line: rgba(29, 84, 140, 0.12);
+  --line-dark: rgba(29, 84, 140, 0.24);
+  --danger: #d9534f;
+  --ok: #2f9e74;
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(35, 96, 160, 0.1);
+  --shadow-hover: 0 18px 40px rgba(35, 96, 160, 0.18);
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(142, 198, 242, 0.45), transparent 38%),
+    radial-gradient(circle at 95% 30%, rgba(182, 218, 247, 0.4), transparent 32%),
+    linear-gradient(180deg, #e3f1fd 0%, var(--bg) 40%, #f7fbff 100%);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  color: #fff;
+  background: var(--accent);
+}

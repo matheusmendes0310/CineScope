@@ -1,0 +1,322 @@
+.movie-card {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  padding: 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition:
+    transform 240ms ease,
+    box-shadow 240ms ease;
+  animation: card-in 380ms ease both;
+}
+
+.movie-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.poster {
+  --poster-accent: var(--accent);
+  position: relative;
+  display: flex;
+  aspect-ratio: 2 / 2.85;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.9rem;
+  overflow: hidden;
+  border-radius: 13px;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 70% 20%,
+      color-mix(in srgb, var(--poster-accent), white 30%),
+      transparent 40%
+    ),
+    linear-gradient(155deg, color-mix(in srgb, var(--poster-accent), black 10%), #16324f 80%);
+}
+
+.poster::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(10, 30, 50, 0.1) 45%, rgba(10, 30, 50, 0.75) 100%);
+  content: '';
+  pointer-events: none;
+}
+
+.poster-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.movie-card:hover .poster-image {
+  transform: scale(1.05);
+}
+
+.poster-details-button {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  padding: 0 1rem 3rem;
+  place-items: end center;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.poster-details-button span {
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  opacity: 0;
+  color: var(--accent-dark);
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(10, 30, 50, 0.25);
+  font: 700 0.75rem/1 var(--font-sans);
+  transform: translateY(8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.poster:hover .poster-details-button span,
+.poster-details-button:focus-visible span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.poster-grain {
+  display: none;
+}
+
+.poster-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1.2rem;
+  text-align: center;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.25), transparent 45%),
+    linear-gradient(160deg, var(--poster-accent), #16324f 90%);
+}
+
+.poster-fallback span {
+  position: absolute;
+  top: 8%;
+  right: -4%;
+  color: rgba(255, 255, 255, 0.12);
+  font: italic 600 10rem/1 var(--font-display);
+}
+
+.poster-fallback strong {
+  position: relative;
+  font: 600 clamp(1.4rem, 2.2vw, 1.9rem)/1.1 var(--font-display);
+}
+
+.poster-fallback small {
+  position: relative;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  font: 700 0.7rem/1 var(--font-sans);
+}
+
+.poster-topline {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  left: 0.75rem;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.status-badge {
+  padding: 0.4rem 0.65rem;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--ok);
+  box-shadow: 0 4px 12px rgba(10, 30, 50, 0.2);
+  font: 700 0.68rem/1 var(--font-sans);
+}
+
+.status-badge.pending {
+  color: var(--accent-dark);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.favorite-button {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 12px rgba(10, 30, 50, 0.2);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.favorite-button:hover {
+  transform: scale(1.1);
+}
+
+.favorite-button.is-favorite {
+  color: #e2506a;
+}
+
+.poster > p {
+  position: relative;
+  z-index: 4;
+  align-self: flex-start;
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(59, 151, 227, 0.85);
+  font: 700 0.64rem/1 var(--font-sans);
+  letter-spacing: 0.08em;
+}
+
+.movie-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0.95rem 0.45rem 0.35rem;
+}
+
+.movie-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.movie-title-row > div {
+  min-width: 0;
+}
+
+.movie-title-row h3 {
+  margin: 0 0 0.35rem;
+  overflow: hidden;
+  color: var(--ink);
+  font: 700 1rem/1.25 var(--font-sans);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.movie-title-row p {
+  margin: 0;
+  color: var(--muted);
+  font: 500 0.76rem/1 var(--font-sans);
+}
+
+.movie-title-row strong {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.55rem;
+  border-radius: 10px;
+  color: var(--accent-dark);
+  background: var(--sky-50);
+  font: 800 0.9rem/1 var(--font-sans);
+}
+
+.movie-description {
+  display: -webkit-box;
+  min-height: calc(3 * 1.5em);
+  margin: 0.8rem 0 0;
+  overflow: hidden;
+  color: var(--muted);
+  font: 400 0.8rem/1.5 var(--font-sans);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.rating-bar {
+  height: 6px;
+  margin: 0.9rem 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--sky-50);
+}
+
+.rating-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sky-300), var(--accent));
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+.card-actions button {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: 0;
+  border-radius: 12px;
+  color: var(--accent-dark);
+  background: var(--sky-50);
+  font: 700 0.75rem/1.2 var(--font-sans);
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background 180ms ease;
+}
+
+.card-actions button:hover {
+  color: #fff;
+  background: var(--accent);
+}
+
+.card-actions .remove-button {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  place-items: center;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.card-actions .remove-button:hover {
+  color: #fff;
+  border-color: var(--danger);
+  background: var(--danger);
+}

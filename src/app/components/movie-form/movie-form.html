@@ -1,0 +1,153 @@
+<section class="form-panel" aria-labelledby="new-movie-title">
+  <div class="form-intro">
+    <p>Nova entrada</p>
+    <h2 id="new-movie-title">Adicione uma história à sua coleção.</h2>
+    <span>Preencha os dados essenciais. Você poderá marcar como favorito depois.</span>
+  </div>
+
+  <form #movieForm="ngForm" (ngSubmit)="submit()">
+    <label class="title-field">
+      <span>Título</span>
+      <!-- ngModel liga o input com draft.title -->
+      <input
+        type="text"
+        name="title"
+        #titleField="ngModel"
+        placeholder="Ex.: Central do Brasil"
+        minlength="2"
+        required
+        [(ngModel)]="draft.title"
+      />
+      @if (titleField.invalid && titleField.touched) {
+        <small class="field-error">Informe um título com pelo menos 2 caracteres.</small>
+      }
+    </label>
+
+    <label>
+      <span>Gênero</span>
+      <select name="genre" [(ngModel)]="draft.genre">
+        @for (genre of genres; track genre) {
+          <option [value]="genre">{{ genre }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      <span>Ano</span>
+      <input
+        type="number"
+        name="year"
+        #yearField="ngModel"
+        min="1900"
+        max="2100"
+        required
+        [(ngModel)]="draft.year"
+      />
+      @if (yearField.invalid && yearField.touched) {
+        <small class="field-error">Digite um ano entre 1900 e 2100.</small>
+      }
+    </label>
+
+    <label class="description-field">
+      <span>Sinopse</span>
+      <textarea
+        name="description"
+        #descriptionField="ngModel"
+        rows="3"
+        minlength="10"
+        maxlength="220"
+        placeholder="Escreva uma sinopse curta, sem spoilers."
+        required
+        [(ngModel)]="draft.description"
+      ></textarea>
+      @if (descriptionField.invalid && descriptionField.touched) {
+        <small class="field-error">Escreva uma introdução com pelo menos 10 caracteres.</small>
+      }
+    </label>
+
+    <div class="cover-field">
+      <div class="cover-copy">
+        <span>Capa do título <small>(opcional)</small></span>
+        <p>Escolha uma imagem JPG, PNG ou WEBP de até 3 MB.</p>
+
+        <label class="cover-upload" for="posterFile">
+          {{ draft.poster ? 'Trocar imagem' : 'Escolher imagem' }}
+        </label>
+        <input
+          #posterFile
+          id="posterFile"
+          class="cover-input"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="selectPoster($event)"
+        />
+
+        @if (posterError) {
+          <small class="field-error">{{ posterError }}</small>
+        }
+      </div>
+
+      @if (draft.poster) {
+        <div class="cover-preview">
+          <img [src]="draft.poster" alt="Prévia da capa escolhida" />
+          <button type="button" (click)="removePoster(posterFile)">Remover capa</button>
+        </div>
+      } @else {
+        <div class="cover-placeholder" aria-hidden="true">
+          <span>＋</span>
+          <small>Prévia da capa</small>
+        </div>
+      }
+    </div>
+
+    <label>
+      <span>Duração</span>
+      <input
+        type="text"
+        name="duration"
+        #durationField="ngModel"
+        placeholder="Ex.: 2h 10min ou 3 temporadas"
+        required
+        [(ngModel)]="draft.duration"
+      />
+      @if (durationField.invalid && durationField.touched) {
+        <small class="field-error">Informe a duração.</small>
+      }
+    </label>
+
+    <label>
+      <span>Nota</span>
+      <input
+        type="number"
+        name="rating"
+        #ratingField="ngModel"
+        min="0"
+        max="10"
+        step="0.1"
+        required
+        [(ngModel)]="draft.rating"
+      />
+      @if (ratingField.invalid && ratingField.touched) {
+        <small class="field-error">A nota deve estar entre 0 e 10.</small>
+      }
+    </label>
+
+    <label class="checkbox-field">
+      <input type="checkbox" name="watched" [(ngModel)]="draft.watched" />
+      <span>Já assisti a este título</span>
+    </label>
+
+    <div class="form-actions">
+      @if (!isValid) {
+        <p class="form-hint">Preencha título, introdução e duração e confira ano e nota.</p>
+      } @else {
+        <p class="form-hint is-ready">Tudo certo para adicionar.</p>
+      }
+      <button class="cancel-button" type="button" (click)="cancelled.emit()">Cancelar</button>
+      <!-- so libera o botao quando o form estiver valido -->
+      <button class="submit-button" type="submit" [disabled]="movieForm.invalid || !isValid">
+        Adicionar à coleção <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </form>
+</section>

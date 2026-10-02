@@ -1,0 +1,79 @@
+<article class="movie-card" [class.is-watched]="movie.watched">
+  <div class="poster" [style.--poster-accent]="movie.accent">
+    @if (movie.poster && !posterBroken) {
+      <img
+        class="poster-image"
+        [src]="movie.poster"
+        [alt]="'Pôster de ' + movie.title"
+        (error)="posterFailed.emit(movie.id)"
+      />
+    } @else {
+      <div class="poster-fallback" aria-hidden="true">
+        <span>{{ movie.title.charAt(0) }}</span>
+        <strong>{{ movie.title }}</strong>
+        <small>{{ movie.year }}</small>
+      </div>
+    }
+
+    <div class="poster-grain"></div>
+
+    <button
+      class="poster-details-button"
+      type="button"
+      (click)="detailsRequested.emit(movie.id)"
+      [attr.aria-label]="'Ver detalhes de ' + movie.title"
+    >
+      <span>Ver detalhes</span>
+    </button>
+
+    <div class="poster-topline">
+      @if (movie.watched) {
+        <span class="status-badge">Já assisti</span>
+      } @else {
+        <span class="status-badge pending">Quero assistir</span>
+      }
+
+      <button
+        class="favorite-button"
+        type="button"
+        (click)="favoriteToggled.emit(movie.id)"
+        [class.is-favorite]="movie.favorite"
+        [attr.aria-label]="movie.favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+      >
+        {{ movie.favorite ? '♥' : '♡' }}
+      </button>
+    </div>
+
+    <p>{{ movie.genre | uppercase }}</p>
+  </div>
+
+  <div class="movie-info">
+    <div class="movie-title-row">
+      <div>
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.year }} · {{ movie.duration }}</p>
+      </div>
+      <strong>{{ movie.rating | number: '1.1-1' }}</strong>
+    </div>
+
+    <p class="movie-description">{{ movie.description }}</p>
+
+    <div class="rating-bar" aria-hidden="true">
+      <span [style.width.%]="movie.rating * 10"></span>
+    </div>
+
+    <div class="card-actions">
+      <button type="button" (click)="watchedToggled.emit(movie.id)">
+        {{ movie.watched ? 'Marcar como não visto' : 'Marcar como assistido' }}
+      </button>
+      <button
+        class="remove-button"
+        type="button"
+        (click)="removed.emit(movie.id)"
+        aria-label="Remover título"
+      >
+        ×
+      </button>
+    </div>
+  </div>
+</article>

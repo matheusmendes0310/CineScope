@@ -1,0 +1,367 @@
+.form-panel {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.7fr);
+  gap: clamp(1.8rem, 4vw, 3.5rem);
+  margin-top: 1.5rem;
+  padding: clamp(1.6rem, 3.5vw, 2.8rem);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  animation: reveal 260ms ease both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.form-intro {
+  padding: 1.6rem;
+  border-radius: 18px;
+  background: linear-gradient(160deg, var(--sky-100), var(--sky-50));
+}
+
+.form-intro p {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--accent);
+  font: 700 0.7rem/1 var(--font-sans);
+  letter-spacing: 0.06em;
+}
+
+.form-intro h2 {
+  margin: 0 0 1rem;
+  color: var(--ink);
+  font: 600 clamp(1.7rem, 3vw, 2.3rem)/1.1 var(--font-display);
+}
+
+.form-intro > span {
+  display: block;
+  color: var(--muted);
+  font: 400 0.85rem/1.6 var(--font-sans);
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  gap: 1.1rem 1rem;
+}
+
+label {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+label > span {
+  color: var(--ink);
+  font: 700 0.78rem/1 var(--font-sans);
+}
+
+.title-field {
+  grid-column: span 2;
+}
+
+.description-field {
+  grid-column: 1 / -1;
+}
+
+.cover-field {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr 110px;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px dashed var(--line-dark);
+  border-radius: 14px;
+  background: var(--surface-soft);
+}
+
+.cover-copy > span {
+  color: var(--ink);
+  font: 700 0.78rem/1 var(--font-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cover-copy > span small {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.cover-copy p {
+  margin: 0.45rem 0 0.8rem;
+  color: var(--muted);
+  font: 500 0.76rem/1.45 var(--font-sans);
+}
+
+.cover-upload {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.7rem 0.9rem;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--accent);
+  font: 700 0.65rem/1 var(--font-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.cover-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cover-preview,
+.cover-placeholder {
+  display: grid;
+  width: 110px;
+  aspect-ratio: 4 / 5;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.cover-preview {
+  position: relative;
+  background: var(--sky-100);
+}
+
+.cover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-preview button {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  left: 0.35rem;
+  padding: 0.45rem;
+  border: 0;
+  border-radius: 6px;
+  color: #fff;
+  background: rgba(22, 50, 79, 0.86);
+  font: 700 0.5rem/1 var(--font-sans);
+  cursor: pointer;
+}
+
+.cover-placeholder {
+  border: 1px solid var(--line);
+  color: var(--accent);
+  background: var(--sky-50);
+  text-align: center;
+}
+
+.cover-placeholder span {
+  font-size: 1.5rem;
+}
+
+.cover-placeholder small {
+  font: 600 0.52rem/1.3 var(--font-sans);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  outline: 0;
+  color: var(--ink);
+  background: var(--surface-soft);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font: 500 0.9rem/1 var(--font-sans);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+input,
+select {
+  height: 2.9rem;
+  padding: 0 0.9rem;
+}
+
+textarea {
+  min-height: 5rem;
+  padding: 0.75rem 0.9rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9db0c3;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(59, 151, 227, 0.15);
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: var(--danger);
+}
+
+.field-error {
+  color: var(--danger);
+  font: 600 0.74rem/1.35 var(--font-sans);
+}
+
+.checkbox-field {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.checkbox-field input {
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0;
+  box-shadow: none;
+  accent-color: var(--accent);
+}
+
+.checkbox-field span {
+  font-weight: 600;
+}
+
+.form-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding-top: 0.4rem;
+}
+
+.form-hint {
+  margin: 0 auto 0 0;
+  color: var(--muted);
+  font: 500 0.8rem/1.4 var(--font-sans);
+}
+
+.form-hint.is-ready {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.form-actions button {
+  border: 0;
+  border-radius: 999px;
+  font: 700 0.85rem/1 var(--font-sans);
+  cursor: pointer;
+}
+
+.cancel-button {
+  padding: 0.9rem 1.2rem;
+  color: var(--muted);
+  background: transparent;
+}
+
+.cancel-button:hover {
+  color: var(--ink);
+  background: var(--sky-50);
+}
+
+.submit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1.4rem;
+  color: #fff;
+  background: var(--accent);
+  box-shadow: 0 8px 20px rgba(59, 151, 227, 0.3);
+  transition:
+    background 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+.submit-button:disabled {
+  opacity: 0.4;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .form-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .title-field {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 440px) {
+  form {
+    grid-template-columns: 1fr;
+  }
+
+  .title-field,
+  .checkbox-field,
+  .form-actions {
+    grid-column: 1;
+  }
+
+  .form-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .form-hint {
+    margin: 0;
+    text-align: center;
+  }
+
+  .form-actions button {
+    justify-content: center;
+  }
+
+  .cover-field {
+    grid-template-columns: 1fr;
+  }
+
+  .cover-preview,
+  .cover-placeholder {
+    width: 96px;
+  }
+}

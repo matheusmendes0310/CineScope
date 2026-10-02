@@ -1,0 +1,245 @@
+<div class="app-shell">
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <app-header
+    [title]="title"
+    [totalMovies]="movies.length"
+    [watchedMovies]="watchedCount"
+    [averageRating]="averageRating"
+  />
+
+  <main class="page-content">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> Biblioteca particular</p>
+        <h1 id="page-title">Histórias para <em>lembrar.</em></h1>
+        <p class="hero-description">
+          {{ subtitle }}. Organize o que você já viu, salve seus favoritos e escolha o que ver
+          depois.
+        </p>
+      </div>
+
+      <button class="add-button" type="button" (click)="toggleForm()" [class.is-open]="showForm">
+        <span aria-hidden="true">{{ showForm ? '×' : '+' }}</span>
+        {{ showForm ? 'Fechar formulário' : 'Adicionar título' }}
+      </button>
+    </section>
+
+    @if (showForm) {
+      <app-movie-form (movieAdded)="addMovie($event)" (cancelled)="toggleForm()" />
+    }
+
+    @if (feedbackMessage) {
+      <div class="feedback-message" role="status">
+        <span aria-hidden="true">✓</span>
+        <p>{{ feedbackMessage }}</p>
+        <button type="button" (click)="dismissFeedback()" aria-label="Fechar mensagem">×</button>
+      </div>
+    }
+
+    <section class="library" aria-labelledby="library-title">
+      <div class="library-heading">
+        <div>
+          <p class="section-kicker">Sua coleção</p>
+          <h2 id="library-title">Minha biblioteca</h2>
+        </div>
+
+        <nav class="view-tabs" aria-label="Visualização da biblioteca">
+          <button type="button" (click)="setView('all')" [class.is-active]="activeView === 'all'">
+            Todos <span>{{ movies.length }}</span>
+          </button>
+          <button
+            type="button"
+            (click)="setView('favorites')"
+            [class.is-active]="activeView === 'favorites'"
+          >
+            Favoritos <span>{{ favoriteCount }}</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="filters">
+        <label class="search-field">
+          <span class="search-icon" aria-hidden="true"></span>
+          <span class="sr-only">Buscar por título</span>
+          <!-- busca por titulo com ngModel -->
+          <input
+            type="search"
+            name="search"
+            placeholder="Buscar um título..."
+            [(ngModel)]="searchTerm"
+          />
+        </label>
+
+        <label class="select-field">
+          <span class="sr-only">Filtrar por gênero</span>
+          <select name="genreFilter" [(ngModel)]="selectedGenre">
+            @for (genre of genres; track genre) {
+              <option [value]="genre">{{ genre }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="select-field">
+          <span class="sr-only">Ordenar títulos</span>
+          <select name="sortOrder" [(ngModel)]="sortOrder">
+            <option value="collection">Ordem alfabética</option>
+            <option value="rating">Maior nota</option>
+            <option value="newest">Mais recentes</option>
+          </select>
+        </label>
+
+        <div class="filter-summary">
+          <p class="result-count">{{ resultLabel }}</p>
+          <button type="button" (click)="clearFilters()" [disabled]="!hasActiveFilters">
+            Limpar filtros
+          </button>
+        </div>
+      </div>
+
+      @if (filteredMovies.length > 0) {
+        <div class="movie-grid">
+          <!-- um card para cada filme da lista filtrada -->
+          @for (movie of filteredMovies; track movie.id) {
+            <app-movie-card
+              [movie]="movie"
+              [posterBroken]="brokenPosters.includes(movie.id)"
+              (posterFailed)="markPosterBroken($event)"
+              (watchedToggled)="toggleWatched($event)"
+              (favoriteToggled)="toggleFavorite($event)"
+              (removed)="removeMovie($event)"
+              (detailsRequested)="openMovieDetails($event)"
+            />
+          }
+        </div>
+      } @else {
+        @if (activeView === 'favorites' && favoriteCount === 0 && !hasSearchOrGenreFilter) {
+          <div class="empty-state">
+            <span class="empty-mark" aria-hidden="true">♡</span>
+            <h3>Nenhum favorito ainda</h3>
+            <p>Use o coração dos cartões para montar sua seleção de favoritos.</p>
+            <button type="button" (click)="setView('all')">Ver todos os títulos</button>
+          </div>
+        } @else {
+          <div class="empty-state">
+            <span class="empty-mark" aria-hidden="true">⌕</span>
+            <h3>Nenhum título por aqui</h3>
+            <p>Tente mudar a busca ou o filtro para reencontrar seus títulos.</p>
+            <button type="button" (click)="clearFilters()">Limpar filtros</button>
+          </div>
+        }
+      }
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <strong>{{ title }}</strong> · Projeto acadêmico de Desenvolvimento FrontEnd
+    </p>
+    <p>{{ watchedCount }} de {{ movies.length }} títulos assistidos</p>
+  </footer>
+
+  @if (selectedMovie; as movie) {
+    <div class="movie-modal-backdrop" (click)="closeMovieDetails()">
+      <section
+        class="movie-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="movie-modal-title"
+        (click)="$event.stopPropagation()"
+      >
+        <button
+          class="modal-close"
+          type="button"
+          (click)="closeMovieDetails()"
+          aria-label="Fechar detalhes"
+        >
+          ×
+        </button>
+
+        <div class="modal-poster" [style.--modal-accent]="movie.accent">
+          @if (movie.poster && !brokenPosters.includes(movie.id)) {
+            <img
+              [src]="movie.poster"
+              [alt]="'Pôster de ' + movie.title"
+              (error)="markPosterBroken(movie.id)"
+            />
+          } @else {
+            <div class="modal-fallback">
+              <span aria-hidden="true">{{ movie.title.charAt(0) }}</span>
+              <strong>{{ movie.title }}</strong>
+            </div>
+          }
+        </div>
+
+        <div class="modal-content">
+          <p class="modal-kicker">Detalhes do título</p>
+          <h2 id="movie-modal-title">{{ movie.title }}</h2>
+
+          <div class="modal-meta">
+            <span>{{ movie.year }}</span>
+            <span>{{ movie.duration }}</span>
+            <span>{{ movie.genre }}</span>
+          </div>
+
+          <div class="modal-status-row">
+            @if (movie.watched) {
+              <span class="modal-status is-watched">✓ Já assisti</span>
+            } @else {
+              <span class="modal-status">Quero assistir</span>
+            }
+            <strong><small>Minha nota</small>{{ formatRating(movie.rating) }}</strong>
+          </div>
+
+          <div class="modal-rating" aria-label="Nota do filme">
+            <span [style.width.%]="movie.rating * 10"></span>
+          </div>
+
+          <div class="rate-box">
+            <label for="rating-slider">
+              Dar outra nota <strong>{{ formatRating(ratingDraft) }}</strong>
+            </label>
+            <div class="rate-row">
+              <input
+                id="rating-slider"
+                type="range"
+                name="ratingDraft"
+                min="0"
+                max="10"
+                step="0.1"
+                [(ngModel)]="ratingDraft"
+              />
+              <button
+                type="button"
+                (click)="saveRating(movie.id)"
+                [disabled]="ratingDraft === movie.rating"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+
+          <div class="modal-synopsis">
+            <h3>Introdução</h3>
+            <p>{{ movie.description }}</p>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" (click)="toggleWatched(movie.id)">
+              {{ movie.watched ? 'Marcar como não visto' : 'Marcar como assistido' }}
+            </button>
+            <button
+              class="modal-favorite"
+              type="button"
+              (click)="toggleFavorite(movie.id)"
+              [class.is-active]="movie.favorite"
+            >
+              {{ movie.favorite ? '♥ Remover dos favoritos' : '♡ Adicionar aos favoritos' }}
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  }
+</div>
